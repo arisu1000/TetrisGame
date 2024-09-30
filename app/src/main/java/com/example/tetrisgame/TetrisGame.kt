@@ -6,10 +6,13 @@ class TetrisGame {
     // 그리드의 가로 세로 크기를 정의
     val gridWidth = 10
     val gridHeight = 20
+    var grid = Array(gridHeight) { IntArray(gridWidth) { 0 } }  // 0: 빈 셀, 1: 블록 고정
 
-    var currentTetromino = Tetromino.I // 현재 블록
-    var positionX = 4  // 블록의 X 위치 (그리드 중앙에서 시작)
-    var positionY = 0  // 블록의 Y 위치 (상단에서 시작)
+
+    // 현재 블록 모양을 나타내는 2D 배열
+    var currentTetrominoShape: Array<IntArray> = tetrominoShapes[Tetromino.I]!! // 블록 모양 초기화
+    var positionX = 4
+    var positionY = 0
 
     // 블록을 아래로 이동
     fun moveDown() {
@@ -40,32 +43,79 @@ class TetrisGame {
 
     // 충돌 감지: 블록이 그리드 아래 경계를 넘는지 확인
     fun canMoveDown(): Boolean {
-        val shape = tetrominoShapes[currentTetromino]!!
-        return positionY + shape.size < gridHeight
+        val shape = currentTetrominoShape
+        for (i in shape.indices) {
+            for (j in shape[i].indices) {
+                if (shape[i][j] == 1) {
+                    if (positionY + i + 1 >= gridHeight) {
+                        return false // 바닥에 닿음
+                    }
+                    // 충돌 감지 추가 필요
+                }
+            }
+        }
+        return true
     }
 
     // 블록을 고정하고 새로운 블록 생성
     fun lockTetromino() {
-        // 그리드에 현재 블록을 고정하는 로직
-        // 새로운 블록을 생성
-        currentTetromino = Tetromino.values().random()
-        positionX = 4
-        positionY = 0
+        val shape = currentTetrominoShape
+        for (i in shape.indices) {
+            for (j in shape[i].indices) {
+                if (shape[i][j] == 1) {
+                    // 그리드에 블록을 고정
+                    grid[positionY + i][positionX + j] = 1
+                }
+            }
+        }
+        checkAndClearLines()  // 줄이 완성되면 삭제
+    }
+
+    fun checkAndClearLines() {
+        for (y in grid.indices) {
+            if (grid[y].all { it == 1 }) {  // 한 줄이 모두 채워졌을 때
+                clearLine(y)
+            }
+        }
+    }
+
+    fun clearLine(row: Int) {
+        // 해당 줄을 삭제하고 위의 줄을 모두 한 줄씩 아래로 이동
+        for (y in row downTo 1) {
+            grid[y] = grid[y - 1].clone()
+        }
+        grid[0] = IntArray(gridWidth) { 0 }  // 최상단 줄은 빈 줄로 초기화
     }
 
     fun spawnNewTetromino() {
-        // 무작위로 새로운 블록 모양 선택 (Tetromino 타입)
-        currentTetromino = Tetromino.values().random()
-
-        // 새로운 블록의 초기 위치 설정
-        positionX = (gridWidth / 2) - (tetrominoShapes[currentTetromino]!![0].size / 2)
-        positionY = 0  // 블록은 맨 위에서부터 떨어짐
+        currentTetrominoShape = tetrominoShapes[Tetromino.values().random()]!!
+        positionX = gridWidth / 2 - currentTetrominoShape[0].size / 2
+        positionY = 0
 
         // 만약 새로운 블록이 생성될 때 이미 블록이 있는 위치라면 게임 오버 처리
         if (!canMoveDown()) {
             Log.d("TetrisGame", "게임 오버!")
             // 게임 오버 처리 (필요시 추가 로직 구현)
         }
+    }
+
+    // 회전 함수
+    fun rotateTetromino() {
+        currentTetrominoShape = rotateTetrominoLogic(currentTetrominoShape)
+    }
+
+    // 회전 로직 함수
+    fun rotateTetrominoLogic(shape: Array<IntArray>): Array<IntArray> {
+        val rows = shape.size
+        val cols = shape[0].size
+        val rotatedShape = Array(cols) { IntArray(rows) }
+
+        for (i in shape.indices) {
+            for (j in shape[i].indices) {
+                rotatedShape[j][rows - 1 - i] = shape[i][j]
+            }
+        }
+        return rotatedShape
     }
 
 }
