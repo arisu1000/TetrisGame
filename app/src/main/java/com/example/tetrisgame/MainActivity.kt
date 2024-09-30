@@ -48,6 +48,13 @@ class MainActivity : AppCompatActivity() {
                     // 화면 상단 1/3을 터치하면 회전
                     if (event.y < tetrisView.height / 3) {
                         tetrisView.tetrisGame.rotateTetromino()  // 회전 함수 호출
+                    }  // 화면 하단을 터치하면 블록을 바닥까지 이동
+                    else if (event.y > tetrisView.height * 2 / 3) {
+                        while (tetrisGame.canMoveDown()) {
+                            tetrisGame.moveDown()  // 계속해서 아래로 이동
+                        }
+                        tetrisGame.lockTetromino()  // 바닥에 닿으면 블록 고정
+                        tetrisView.invalidate()  // 화면 갱신
                     } else {
                         // 좌우 이동 처리 (화면 좌우를 터치)
                         if (event.x < tetrisView.width / 2) {
