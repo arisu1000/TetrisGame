@@ -1,3 +1,4 @@
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Handler
@@ -172,9 +173,12 @@ class TetrisGame(val context: Context, val tetrisView: TetrisView) {
                 resetGame()  // 게임 상태 초기화
                 tetrisView.invalidate()  // 화면 갱신
             }
-            .setNegativeButton("아니요", null)
+            .setNegativeButton("아니오") { _, _ ->
+                (context as Activity).finish()  // 액티비티 종료
+            }
             .show()
     }
+
 
     // 회전 함수
     fun rotateTetromino() {
