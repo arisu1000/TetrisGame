@@ -1,3 +1,4 @@
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -153,11 +154,7 @@ class TetrisGame(val context: Context, val tetrisView: TetrisView) {
             saveHighScore()
         }
 
-        // 2초 후에 게임을 재시작
-        Handler(Looper.getMainLooper()).postDelayed({
-            resetGame()  // 게임 상태 초기화
-            tetrisView.invalidate()  // 화면 갱신
-        }, 2000)
+        showRestartDialog()  // 다시 시작 여부 묻기
     }
 
     fun resetGame() {
@@ -165,6 +162,18 @@ class TetrisGame(val context: Context, val tetrisView: TetrisView) {
         score = 0  // 점수 초기화
         isGameOver = false  // 게임 오버 상태 초기화
         spawnNewTetromino()  // 새로운 블록 생성
+    }
+
+    fun showRestartDialog() {
+        AlertDialog.Builder(tetrisView.context)
+            .setTitle("Game Over")
+            .setMessage("게임을 다시 시작하시겠습니까?")
+            .setPositiveButton("예") { _, _ ->
+                resetGame()  // 게임 상태 초기화
+                tetrisView.invalidate()  // 화면 갱신
+            }
+            .setNegativeButton("아니요", null)
+            .show()
     }
 
     // 회전 함수
