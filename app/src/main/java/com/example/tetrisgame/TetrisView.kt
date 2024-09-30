@@ -48,6 +48,14 @@ class TetrisView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         // 블록을 그리기
         drawTetromino(canvas)
 
+        // 점수 표시
+        val scorePaint = Paint().apply {
+            color = Color.WHITE
+            textSize = 50f
+            textAlign = Paint.Align.RIGHT
+        }
+        canvas.drawText("Score: ${tetrisGame.score}", (width - 20).toFloat(), 60f, scorePaint)
+
         if (tetrisGame.isGameOver) {
             val paint = Paint().apply {
                 color = Color.RED

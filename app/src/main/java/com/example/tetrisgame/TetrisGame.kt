@@ -10,6 +10,7 @@ class TetrisGame(val context: Context) {
     val gridHeight = 20
     var grid = Array(gridHeight) { IntArray(gridWidth) { 0 } }  // 0: 빈 셀, 1: 블록 고정
 
+    var score: Int = 0  // 점수를 저장할 변수
 
     // 현재 블록 모양을 나타내는 2D 배열
     var currentTetrominoShape: Array<IntArray> = tetrominoShapes[Tetromino.I]!! // 블록 모양 초기화
@@ -30,12 +31,44 @@ class TetrisGame(val context: Context) {
 
     // 블록을 왼쪽으로 이동
     fun moveLeft() {
-        positionX--
+        if (canMoveLeft()) {
+            positionX--
+        }
     }
 
     // 블록을 오른쪽으로 이동
     fun moveRight() {
-        positionX++
+        if (canMoveRight()) {
+            positionX++
+        }
+    }
+
+    fun canMoveLeft(): Boolean {
+        val shape = currentTetrominoShape
+        for (i in shape.indices) {
+            for (j in shape[i].indices) {
+                if (shape[i][j] == 1) {
+                    if (positionX + j - 1 < 0 || grid[positionY + i][positionX + j - 1] == 1) {
+                        return false  // 그리드 왼쪽 끝이거나 블록이 있을 경우 이동 불가
+                    }
+                }
+            }
+        }
+        return true
+    }
+
+    fun canMoveRight(): Boolean {
+        val shape = currentTetrominoShape
+        for (i in shape.indices) {
+            for (j in shape[i].indices) {
+                if (shape[i][j] == 1) {
+                    if (positionX + j + 1 >= gridWidth || grid[positionY + i][positionX + j + 1] == 1) {
+                        return false  // 그리드 오른쪽 끝이거나 블록이 있을 경우 이동 불가
+                    }
+                }
+            }
+        }
+        return true
     }
 
     // 블록을 회전 (단순하게 가로 세로 뒤바꾸기)
@@ -74,12 +107,16 @@ class TetrisGame(val context: Context) {
     }
 
     fun checkAndClearLines() {
+        var linesCleared = 0
         for (y in grid.indices) {
             if (grid[y].all { it == 1 }) {  // 한 줄이 모두 채워졌을 때
                 clearLine(y)
+                linesCleared++
             }
         }
+        score += linesCleared * 100  // 삭제된 줄 수에 따라 점수 증가
     }
+
 
     fun clearLine(row: Int) {
         // 해당 줄을 삭제하고 위의 줄을 모두 한 줄씩 아래로 이동
