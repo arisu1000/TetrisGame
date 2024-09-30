@@ -47,10 +47,10 @@ class TetrisGame {
         for (i in shape.indices) {
             for (j in shape[i].indices) {
                 if (shape[i][j] == 1) {
-                    if (positionY + i + 1 >= gridHeight) {
-                        return false // 바닥에 닿음
+                    // 그리드 바닥이거나 다른 블록과 충돌하면 이동 불가
+                    if (positionY + i + 1 >= gridHeight || grid[positionY + i + 1][positionX + j] == 1) {
+                        return false
                     }
-                    // 충돌 감지 추가 필요
                 }
             }
         }
