@@ -90,6 +90,8 @@ class TetrisGame(val context: Context) {
     }
 
     fun spawnNewTetromino() {
+        if (isGameOver) return
+
         currentTetrominoShape = tetrominoShapes[Tetromino.values().random()]!!
         positionX = gridWidth / 2 - currentTetrominoShape[0].size / 2
         positionY = 0
@@ -102,12 +104,13 @@ class TetrisGame(val context: Context) {
         }
     }
 
-    fun gameOver() {
-        // 게임 오버 처리
-        Toast.makeText(context, "Game Over", Toast.LENGTH_LONG).show()
+    var isGameOver = false
 
-        // 추가적으로 게임을 종료하거나, 재시작 로직 등을 구현 가능
+    fun gameOver() {
+        isGameOver = true
+        // 추가 게임 종료 로직 (예: 화면 갱신)
     }
+
 
     // 회전 함수
     fun rotateTetromino() {

@@ -29,7 +29,7 @@ class TetrisView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
     // 블록 색상
     private val blockPaint = Paint().apply {
-        color = Color.RED  // 블록 색상 설정
+        color = Color.BLUE  // 블록 색상 설정
         style = Paint.Style.FILL
     }
 
@@ -47,6 +47,17 @@ class TetrisView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
         // 블록을 그리기
         drawTetromino(canvas)
+
+        if (tetrisGame.isGameOver) {
+            val paint = Paint().apply {
+                color = Color.RED
+                textSize = 100f  // 텍스트 크기 설정
+                textAlign = Paint.Align.CENTER
+            }
+            val xPos = width / 2
+            val yPos = height / 2 - ((paint.descent() + paint.ascent()) / 2)
+            canvas.drawText("Game Over", xPos.toFloat(), yPos.toFloat(), paint)
+        }
 
     }
 
