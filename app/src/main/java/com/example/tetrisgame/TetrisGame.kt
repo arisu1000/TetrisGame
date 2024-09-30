@@ -1,10 +1,13 @@
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import com.example.tetrisgame.TetrisView
 import com.example.tetrisgame.Tetromino
 import com.example.tetrisgame.tetrominoShapes
 
-class TetrisGame(val context: Context) {
+class TetrisGame(val context: Context, val tetrisView: TetrisView) {
     // 그리드의 가로 세로 크기를 정의
     val gridWidth = 10
     val gridHeight = 20
@@ -149,8 +152,20 @@ class TetrisGame(val context: Context) {
         if (score > loadHighScore()) {
             saveHighScore()
         }
+
+        // 2초 후에 게임을 재시작
+        Handler(Looper.getMainLooper()).postDelayed({
+            resetGame()  // 게임 상태 초기화
+            tetrisView.invalidate()  // 화면 갱신
+        }, 2000)
     }
 
+    fun resetGame() {
+        grid = Array(gridHeight) { IntArray(gridWidth) { 0 } }  // 그리드 초기화
+        score = 0  // 점수 초기화
+        isGameOver = false  // 게임 오버 상태 초기화
+        spawnNewTetromino()  // 새로운 블록 생성
+    }
 
     // 회전 함수
     fun rotateTetromino() {

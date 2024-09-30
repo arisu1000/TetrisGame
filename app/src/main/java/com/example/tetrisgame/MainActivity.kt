@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         tetrisView = findViewById(R.id.tetrisView)
-        tetrisGame = TetrisGame(this)  // TetrisGame 인스턴스 생성
+        tetrisGame = TetrisGame(this, tetrisView)  // TetrisGame 인스턴스 생성
         tetrisView.tetrisGame = tetrisGame  // TetrisView와 tetrisGame 연결
 
         // 1초마다 블록이 아래로 이동
