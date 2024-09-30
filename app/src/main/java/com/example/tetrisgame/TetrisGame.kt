@@ -146,6 +146,9 @@ class TetrisGame(val context: Context) {
     fun gameOver() {
         isGameOver = true
         // 추가 게임 종료 로직 (예: 화면 갱신)
+        if (score > loadHighScore()) {
+            saveHighScore()
+        }
     }
 
 
@@ -168,4 +171,16 @@ class TetrisGame(val context: Context) {
         return rotatedShape
     }
 
+    fun saveHighScore() {
+        val sharedPref = context.getSharedPreferences("TetrisGame", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putInt("HIGH_SCORE", score)
+            apply()
+        }
+    }
+
+    fun loadHighScore(): Int {
+        val sharedPref = context.getSharedPreferences("TetrisGame", Context.MODE_PRIVATE)
+        return sharedPref.getInt("HIGH_SCORE", 0)  // 저장된 최고 점수 반환, 없으면 0 반환
+    }
 }

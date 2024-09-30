@@ -56,6 +56,10 @@ class TetrisView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         }
         canvas.drawText("Score: ${tetrisGame.score}", (width - 20).toFloat(), 60f, scorePaint)
 
+        val highScore = tetrisGame.loadHighScore()
+        canvas.drawText("High Score: $highScore", (width - 20).toFloat(), 120f, scorePaint)
+
+
         if (tetrisGame.isGameOver) {
             val paint = Paint().apply {
                 color = Color.RED
