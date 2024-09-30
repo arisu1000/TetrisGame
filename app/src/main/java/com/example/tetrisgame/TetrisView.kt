@@ -33,7 +33,7 @@ class TetrisView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         style = Paint.Style.FILL
     }
 
-    var tetrisGame = TetrisGame()  // 게임 상태 관리
+    var tetrisGame = TetrisGame(context)  // 게임 상태 관리
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)

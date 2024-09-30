@@ -6,6 +6,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         tetrisView = findViewById(R.id.tetrisView)
-        tetrisGame = TetrisGame()  // TetrisGame 인스턴스 생성
+        tetrisGame = TetrisGame(this)  // TetrisGame 인스턴스 생성
         tetrisView.tetrisGame = tetrisGame  // TetrisView와 tetrisGame 연결
 
         // 1초마다 블록이 아래로 이동
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
+
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_SPACE) {

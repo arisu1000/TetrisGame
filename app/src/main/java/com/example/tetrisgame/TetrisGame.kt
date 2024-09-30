@@ -1,8 +1,10 @@
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.example.tetrisgame.Tetromino
 import com.example.tetrisgame.tetrominoShapes
 
-class TetrisGame {
+class TetrisGame(val context: Context) {
     // 그리드의 가로 세로 크기를 정의
     val gridWidth = 10
     val gridHeight = 20
@@ -96,7 +98,15 @@ class TetrisGame {
         if (!canMoveDown()) {
             Log.d("TetrisGame", "게임 오버!")
             // 게임 오버 처리 (필요시 추가 로직 구현)
+            gameOver()
         }
+    }
+
+    fun gameOver() {
+        // 게임 오버 처리
+        Toast.makeText(context, "Game Over", Toast.LENGTH_LONG).show()
+
+        // 추가적으로 게임을 종료하거나, 재시작 로직 등을 구현 가능
     }
 
     // 회전 함수
